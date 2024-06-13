@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './login.css';
+import styles from './login.module.css'; // Importa estilos usando CSS Modules
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -35,45 +35,42 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <div className="box">
-        <form onSubmit={handleLogin}>
-          <div className="title">
-            <h1>Login Form</h1>
-          </div>
-          <div className="input-box">
-            <label htmlFor="email" className="label-color">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <br />
-            <label htmlFor="password" className="label-color">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <br />
-            <input type="submit" className="Login" value="Login" />
-            <br />
-            {error && <p className="error-message">{error}</p>}
-            <p className="link-text">Forget password? <a href="#">Click Here</a></p>
-            <p className="link-text">
-              Don't have an account? <a href="/formulario">Click Here</a>
-            </p>
-          </div>
-        </form>
-      </div>
+    <div className={styles.box}>
+      <form onSubmit={handleLogin}>
+        <div className={styles.title}>
+          <h1> -- Portal al Saber -- </h1>
+        </div>
+        <div className={styles['input-box']}>
+          <label htmlFor="email" className={styles['label-color']}>Correo</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Ingresa un correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <br />
+          <label htmlFor="password" className={styles['label-color']}>Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Ingrese una contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <br />
+          <input type="submit" className={styles.Login} value="Login" />
+          <br />
+          {error && <p className={styles['error-message']}>{error}</p>}
+          <p className={styles['link-text']}>
+            ¿No tienes una cuenta? <a href="/formulario">Presiona aquí</a>
+          </p>
+        </div>
+      </form>
     </div>
   );
 }

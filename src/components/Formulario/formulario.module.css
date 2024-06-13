@@ -15,7 +15,7 @@
   .box {
     position: relative;
     width: 370px;
-    height: 450px;
+    height: 570px;
     background: #1c1c1c;
     border-radius: 50px 5px;
     overflow: hidden;
@@ -26,7 +26,7 @@
     top: -50%;
     left: -50%;
     width: 370px;
-    height: 450px;
+    height: 570px;
     background: linear-gradient(60deg, transparent, #45f3ff, #45f3ff);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
@@ -38,7 +38,7 @@
     top: -50%;
     left: -50%;
     width: 370px;
-    height: 450px;
+    height: 570px;
     background: linear-gradient(60deg, transparent, #d9138a, #d9138a);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
@@ -104,7 +104,7 @@
   form .link-text {
     padding-top: 15px;
     color: rgb(103, 173, 183);
-    font-size: 0.85rem;
+    font-size: 0.98 rem;
   }
   form .link-text a {
     text-decoration: none;
@@ -114,3 +114,13 @@
   .label-color {
     color: #9eb3b5;
   }
+
+  /* Para el mensaje de error */
+.error-message {
+  color: #ff6347; 
+}
+
+/* Para el mensaje de éxito */
+.success-message {
+  color: #32cd32; 
+}
