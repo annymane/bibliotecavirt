@@ -41,7 +41,7 @@ export default function BuscarLibros() {
     const agregarLibro = (libroId) => {
         console.log(`Agregando libro con ID ${libroId} a la biblioteca personal`);
         axios.post('http://localhost:5000/api/biblioteca_personal', {
-            usuario_id: 1, // Reemplaza por el ID real del usuario
+            usuario_id: 7, // Reemplaza por el ID real del usuario
             libro_id: libroId
         })
         .then(response => {

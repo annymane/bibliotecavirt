@@ -10,7 +10,7 @@ export default function BibliotecaPersonal() {
     }, []);
 
     const cargarLibros = () => {
-        axios.get('http://localhost:5000/api/biblioteca_personal/1/libros') // Aquí 1 es el usuario_id, ajusta según tu lógica
+        axios.get('http://localhost:5000/api/biblioteca_personal/7/libros') // Aquí 1 es el usuario_id, ajusta según tu lógica
             .then(response => {
                 setLibros(response.data);
             })
@@ -20,7 +20,7 @@ export default function BibliotecaPersonal() {
     };
 
     const eliminarLibro = (libroId) => {
-        axios.delete(`http://localhost:5000/api/biblioteca_personal/1/libros/${libroId}`) // Aquí 1 es el usuario_id, ajusta según tu lógica
+        axios.delete(`http://localhost:5000/api/biblioteca_personal/7/libros/${libroId}`) // Aquí 1 es el usuario_id, ajusta según tu lógica
             .then(response => {
                 console.log(response.data.mensaje);
                 // Actualizar la lista de libros después de eliminar
@@ -33,7 +33,7 @@ export default function BibliotecaPersonal() {
 
     const marcarLibro = (libroId, leido) => {
         axios.post('http://localhost:5000/api/biblioteca_personal/marcar_libro', {
-            usuario_id: 1, // Ajusta según tu lógica
+            usuario_id: 7, // Ajusta según tu lógica
             libro_id: libroId,
             leido: !leido
         })
