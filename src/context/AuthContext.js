@@ -1,17 +1,16 @@
-// src/context/AuthContext.js
 import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Inicialmente, el usuario no está autenticado
+  const [user, setUser] = useState(null);
 
   const login = (userData) => {
-    setUser(userData); // Establecer los datos del usuario al autenticarse
+    setUser(userData);
   };
 
   const logout = () => {
-    setUser(null); // Eliminar los datos del usuario al cerrar sesión
+    setUser(null);
   };
 
   return (

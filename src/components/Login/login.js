@@ -1,41 +1,44 @@
-// src/components/Login/login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './login.module.css'; // Importa estilos usando CSS Modules
-import { useAuth } from '../../context/AuthContext'; // Importar el contexto de autenticación
+import styles from './login.module.css';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Obtener la función login del contexto de autenticación
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
-    const response = await fetch('http://127.0.0.1:5000/api/usuarios/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        contraseña: password,
-      }),
-    });
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/usuarios/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          contraseña: password,
+        }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      console.log('Login exitoso', data);
-      // Llamar a la función login del contexto para establecer el estado del usuario
-      login({ email }); // Puedes ajustar esto para incluir más datos del usuario si es necesario
-      // Redirigir al usuario al componente Home
-      navigate('/home');
-    } else {
-      console.error('Error en el login', data);
-      setError(data.mensaje || 'Error desconocido');
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Login exitoso', data);
+        // Asegúrate de que data.id sea el ID del usuario que el servidor devuelve
+        login({ email, id: data.usuario.id });
+        navigate('/home');
+      } else {
+        console.error('Error en el login', data);
+        setError(data.mensaje || 'Error desconocido');
+      }
+    } catch (error) {
+      console.error('Error al conectar con el servidor', error);
+      setError('Error de conexión');
     }
   };
 

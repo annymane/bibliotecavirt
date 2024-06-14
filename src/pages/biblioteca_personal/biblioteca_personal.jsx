@@ -1,30 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from './biblioteca_personal.module.css'; // Importa estilos CSS Modules
+import styles from './biblioteca_personal.module.css'; 
+import { useAuth } from '../../context/AuthContext'; 
 
 export default function BibliotecaPersonal() {
     const [libros, setLibros] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { user } = useAuth(); // Obtener el usuario del contexto
 
     useEffect(() => {
-        cargarLibros();
-    }, []);
+        if (user && user.id) {
+            cargarLibros(user.id);
+        }
+    }, [user]);
 
-    const cargarLibros = () => {
-        axios.get('http://localhost:5000/api/biblioteca_personal/7/libros') // Aquí 1 es el usuario_id, ajusta según tu lógica
+    const cargarLibros = (userId) => {
+        axios.get(`http://localhost:5000/api/biblioteca_personal/${userId}/libros`)
             .then(response => {
                 setLibros(response.data);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error al cargar libros de la biblioteca personal:', error);
+                setError('Error al cargar libros. Inténtalo de nuevo más tarde.');
+                setLoading(false);
             });
     };
 
     const eliminarLibro = (libroId) => {
-        axios.delete(`http://localhost:5000/api/biblioteca_personal/7/libros/${libroId}`) // Aquí 1 es el usuario_id, ajusta según tu lógica
+        axios.delete(`http://localhost:5000/api/biblioteca_personal/${user.id}/libros/${libroId}`)
             .then(response => {
                 console.log(response.data.mensaje);
-                // Actualizar la lista de libros después de eliminar
-                cargarLibros();
+                cargarLibros(user.id);
             })
             .catch(error => {
                 console.error('Error al eliminar libro de la biblioteca personal:', error);
@@ -33,18 +41,26 @@ export default function BibliotecaPersonal() {
 
     const marcarLibro = (libroId, leido) => {
         axios.post('http://localhost:5000/api/biblioteca_personal/marcar_libro', {
-            usuario_id: 7, // Ajusta según tu lógica
+            usuario_id: user.id,
             libro_id: libroId,
             leido: !leido
         })
         .then(response => {
             console.log(response.data.mensaje);
-            cargarLibros();
+            cargarLibros(user.id);
         })
         .catch(error => {
             console.error('Error al marcar libro como leído/no leído:', error);
         });
     };
+
+    if (loading) {
+        return <p>Loading...</p>; // Indicador de carga
+    }
+
+    if (error) {
+        return <p>{error}</p>; // Mensaje de error
+    }
 
     return (
         <div className={styles.container}>
@@ -74,7 +90,6 @@ export default function BibliotecaPersonal() {
                                 <td>{libro.genero}</td>
                                 <td>{libro.idioma}</td>
                                 <td className={styles.buttonContainer}>
-                                    
                                     <button
                                         className={`${styles.button} ${styles.buttonEliminar}`}
                                         onClick={() => eliminarLibro(libro.id)}
@@ -87,7 +102,6 @@ export default function BibliotecaPersonal() {
                                     >
                                         {libro.leido ? 'Leído' : 'No leído'}
                                     </button>
-                                   
                                 </td>
                             </tr>
                         ))}
