@@ -18,7 +18,7 @@ export default function Login() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: email,
+        email,
         contraseña: password,
       }),
     });
