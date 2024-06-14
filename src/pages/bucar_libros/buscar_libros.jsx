@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './buscar_libros.module.css'; // Importa estilos usando CSS Modules
+import { useAuth } from '../../context/AuthContext'; 
 
 export default function BuscarLibros() {
     const [libros, setLibros] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [librosPerPage] = useState(50);
-    const [errorMensaje, setErrorMensaje] = useState('');
+    const [mensaje, setMensaje] = useState({ tipo: '', texto: '' });
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+    const { user } = useAuth(); // Obtener el usuario del contexto
 
     useEffect(() => {
         cargarLibros();
@@ -39,31 +41,31 @@ export default function BuscarLibros() {
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const agregarLibro = (libroId) => {
-        console.log(`Agregando libro con ID ${libroId} a la biblioteca personal`);
+       
         axios.post('http://localhost:5000/api/biblioteca_personal', {
-            usuario_id: 7, // Reemplaza por el ID real del usuario
+            usuario_id: user.id, // Utiliza el ID real del usuario del contexto
             libro_id: libroId
         })
         .then(response => {
             console.log(response.data.mensaje);
-            setErrorMensaje('Libro agregado a la biblioteca personal');
+            setMensaje({ tipo: 'alert-success', texto: 'Libro agregado a la biblioteca personal' });
             setTimeout(() => {
-                setErrorMensaje('');
-            }, 2500); // Desaparece el mensaje después de 2 segundos
+                setMensaje({ tipo: '', texto: '' });
+            }, 2500); // Desaparece el mensaje después de 2.5 segundos
         })
         .catch(error => {
             if (error.response && error.response.status === 409) {
                 console.error('El libro ya se añadió anteriormente');
-                setErrorMensaje('El libro ya se añadió anteriormente');
+                setMensaje({ tipo: 'alert-danger', texto: 'El libro ya se añadió anteriormente' });
                 setTimeout(() => {
-                    setErrorMensaje('');
-                }, 2000); // Desaparece el mensaje después de 2 segundos
+                    setMensaje({ tipo: '', texto: '' });
+                }, 2500); // Desaparece el mensaje después de 2.5 segundos
             } else {
                 console.error('Error al agregar libro a la biblioteca personal:', error);
-                setErrorMensaje('Error al agregar libro a la biblioteca personal');
+                setMensaje({ tipo: 'alert-danger', texto: 'Error al agregar libro a la biblioteca personal' });
                 setTimeout(() => {
-                    setErrorMensaje('');
-                }, 2000); // Desaparece el mensaje después de 2 segundos
+                    setMensaje({ tipo: '', texto: '' });
+                }, 2500); // Desaparece el mensaje después de 2.5 segundos
             }
         });
     };
@@ -83,7 +85,7 @@ export default function BuscarLibros() {
                     Regresar
                 </button>
             </div>
-            {errorMensaje && <div className={`${styles.alert} ${styles['alert-danger']}`}>{errorMensaje}</div>}
+            {mensaje.texto && <div className={`${styles.alert} ${styles[mensaje.tipo]}`}>{mensaje.texto}</div>}
             <div className={styles['table-responsive']}>
                 <table className={`${styles.table} ${styles['table-hover']} ${styles['table-striped']}`}>
                     <thead>
