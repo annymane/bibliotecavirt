@@ -1,12 +1,15 @@
+// src/components/Login/login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css'; // Importa estilos usando CSS Modules
+import { useAuth } from '../../context/AuthContext'; // Importar el contexto de autenticación
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Obtener la función login del contexto de autenticación
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,6 +29,8 @@ export default function Login() {
     const data = await response.json();
     if (response.ok) {
       console.log('Login exitoso', data);
+      // Llamar a la función login del contexto para establecer el estado del usuario
+      login({ email }); // Puedes ajustar esto para incluir más datos del usuario si es necesario
       // Redirigir al usuario al componente Home
       navigate('/home');
     } else {
