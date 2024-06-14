@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './biblioteca_personal.module.css'; 
 import { useAuth } from '../../context/AuthContext'; 
+import { useNavigate } from 'react-router-dom'; 
 
 export default function BibliotecaPersonal() {
     const [libros, setLibros] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user } = useAuth(); // Obtener el usuario del contexto
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         if (user && user.id) {
@@ -58,12 +60,14 @@ export default function BibliotecaPersonal() {
         return <p>Loading...</p>; // Indicador de carga
     }
 
-    if (error) {
-        return <p>{error}</p>; // Mensaje de error
-    }
-
     return (
         <div className={styles.container}>
+            <div className={styles.buttonContainer}>
+                <button onClick={() => navigate('/home')} className={`${styles.button} ${styles.buttonRegresar}`}>
+                    Regresar
+                </button>
+            </div>
+            <div></div>
             <h2>Biblioteca Personal</h2>
             <div className={styles.tableResponsive}>
                 <table className={`${styles.table} ${styles.tableHover} ${styles.tableStriped}`}>
