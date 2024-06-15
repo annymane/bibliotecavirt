@@ -71,7 +71,7 @@ export default function Login() {
             required
           />
           <br />
-          <input type="submit" className={styles.Login} value="Login" />
+          <input type="submit" className={styles.Login} value="Ingresar" />
           <br />
           {error && <p className={styles['error-message']}>{error}</p>}
           <p className={styles['link-text']}>
