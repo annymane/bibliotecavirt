@@ -29,7 +29,7 @@ export default function Login() {
       const data = await response.json();
       if (response.ok) {
         console.log('Login exitoso', data);
-        // Asegúrate de que data.id sea el ID del usuario que el servidor devuelve
+        //ID del usuario que el servidor devuelve
         login({ email, id: data.usuario.id });
         navigate('/home');
       } else {
